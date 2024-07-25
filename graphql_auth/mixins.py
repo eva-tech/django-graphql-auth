@@ -363,7 +363,7 @@ class PasswordSetMixin(Output):
             return cls(success=False, errors=Messages.EXPIRED_TOKEN)
         except (BadSignature, TokenScopeError):
             return cls(success=False, errors=Messages.INVALID_TOKEN)
-        except (PasswordAlreadySetError):
+        except PasswordAlreadySetError:
             return cls(success=False, errors=Messages.PASSWORD_ALREADY_SET)
 
 
@@ -429,9 +429,16 @@ class ObtainJSONWebTokenMixin(Output):
                 raise UserNotVerified
             raise InvalidCredentials
         except (JSONWebTokenError, ObjectDoesNotExist, InvalidCredentials):
-            return cls(success=False, errors=Messages.INVALID_CREDENTIALS, token="", refresh_token="")
+            return cls(
+                success=False,
+                errors=Messages.INVALID_CREDENTIALS,
+                token="",
+                refresh_token="",
+            )
         except UserNotVerified:
-            return cls(success=False, errors=Messages.NOT_VERIFIED, token="", refresh_token="")
+            return cls(
+                success=False, errors=Messages.NOT_VERIFIED, token="", refresh_token=""
+            )
 
 
 class ArchiveOrDeleteMixin(Output):
@@ -587,9 +594,19 @@ class RefreshTokenMixin(Output):
         try:
             return cls.parent_resolve(root, info, **kwargs)
         except JSONWebTokenExpired:
-            return cls(success=False, errors=Messages.EXPIRED_TOKEN, payload="", refresh_token="")
+            return cls(
+                success=False,
+                errors=Messages.EXPIRED_TOKEN,
+                payload="",
+                refresh_token="",
+            )
         except JSONWebTokenError:
-            return cls(success=False, errors=Messages.INVALID_TOKEN, payload="", refresh_token="")
+            return cls(
+                success=False,
+                errors=Messages.INVALID_TOKEN,
+                payload="",
+                refresh_token="",
+            )
 
 
 class SendSecondaryEmailActivationMixin(Output):

@@ -17,7 +17,10 @@ from .mixins import (
     SendSecondaryEmailActivationMixin,
     VerifySecondaryEmailMixin,
     SwapEmailsMixin,
-    RemoveSecondaryEmailMixin, VerifyTokenMixin, RevokeTokenMixin, RefreshTokenMixin,
+    RemoveSecondaryEmailMixin,
+    VerifyTokenMixin,
+    RevokeTokenMixin,
+    RefreshTokenMixin,
 )
 from .utils import normalize_fields
 from .settings import graphql_auth_settings as app_settings
@@ -173,27 +176,21 @@ class UpdateAccount(
     _inputs = app_settings.UPDATE_MUTATION_FIELDS
 
 
-class VerifyToken(
-    RelayMutationMixin, VerifyTokenMixin, graphql_jwt.relay.Verify
-):
+class VerifyToken(RelayMutationMixin, VerifyTokenMixin, graphql_jwt.relay.Verify):
     __doc__ = VerifyTokenMixin.__doc__
 
     class Input:
         token = graphene.String(required=True)
 
 
-class RefreshToken(
-    RelayMutationMixin, RefreshTokenMixin, graphql_jwt.relay.Refresh
-):
+class RefreshToken(RelayMutationMixin, RefreshTokenMixin, graphql_jwt.relay.Refresh):
     __doc__ = RefreshTokenMixin.__doc__
 
     class Input(graphql_jwt.mixins.RefreshMixin.Fields):
         """Refresh Input"""
 
 
-class RevokeToken(
-    RelayMutationMixin, RevokeTokenMixin, graphql_jwt.relay.Revoke
-):
+class RevokeToken(RelayMutationMixin, RevokeTokenMixin, graphql_jwt.relay.Revoke):
     __doc__ = RevokeTokenMixin.__doc__
 
     class Input:

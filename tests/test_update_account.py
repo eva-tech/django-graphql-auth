@@ -39,9 +39,7 @@ class UpdateAccountTestCaseMixin:
 
     def test_invalid_form(self):
         variables = {"user": self.user2}
-        executed = self.make_request(
-            self.get_query("a" * 200), variables
-        )
+        executed = self.make_request(self.get_query("a" * 200), variables)
         self.assertEqual(executed["success"], False)
         self.assertTrue(executed["errors"]["firstName"])
         self.user2.refresh_from_db()

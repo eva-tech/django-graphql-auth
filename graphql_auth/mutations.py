@@ -17,7 +17,10 @@ from .mixins import (
     SendSecondaryEmailActivationMixin,
     VerifySecondaryEmailMixin,
     SwapEmailsMixin,
-    RemoveSecondaryEmailMixin, VerifyTokenMixin, RevokeTokenMixin, RefreshTokenMixin,
+    RemoveSecondaryEmailMixin,
+    VerifyTokenMixin,
+    RevokeTokenMixin,
+    RefreshTokenMixin,
 )
 from .utils import normalize_fields
 from .settings import graphql_auth_settings as app_settings
@@ -148,9 +151,7 @@ class VerifyToken(MutationMixin, VerifyTokenMixin, graphql_jwt.Verify):
     __doc__ = VerifyTokenMixin.__doc__
 
 
-class RefreshToken(
-    MutationMixin, RefreshTokenMixin, graphql_jwt.Refresh
-):
+class RefreshToken(MutationMixin, RefreshTokenMixin, graphql_jwt.Refresh):
     __doc__ = RefreshTokenMixin.__doc__
 
 
