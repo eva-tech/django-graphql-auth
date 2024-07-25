@@ -429,9 +429,9 @@ class ObtainJSONWebTokenMixin(Output):
                 raise UserNotVerified
             raise InvalidCredentials
         except (JSONWebTokenError, ObjectDoesNotExist, InvalidCredentials):
-            return cls(success=False, errors=Messages.INVALID_CREDENTIALS)
+            return cls(success=False, errors=Messages.INVALID_CREDENTIALS, token="", refresh_token="")
         except UserNotVerified:
-            return cls(success=False, errors=Messages.NOT_VERIFIED)
+            return cls(success=False, errors=Messages.NOT_VERIFIED, token="", refresh_token="")
 
 
 class ArchiveOrDeleteMixin(Output):
@@ -547,7 +547,7 @@ class UpdateAccountMixin(Output):
             return cls(success=False, errors=f.errors.get_json_data())
 
 
-class VerifyOrRefreshOrRevokeTokenMixin(Output):
+class VerifyTokenMixin(Output):
     """
     Same as `grapgql_jwt` implementation, with standard output.
     """
@@ -557,9 +557,39 @@ class VerifyOrRefreshOrRevokeTokenMixin(Output):
         try:
             return cls.parent_resolve(root, info, **kwargs)
         except JSONWebTokenExpired:
-            return cls(success=False, errors=Messages.EXPIRED_TOKEN)
+            return cls(success=False, errors=Messages.EXPIRED_TOKEN, payload="")
         except JSONWebTokenError:
-            return cls(success=False, errors=Messages.INVALID_TOKEN)
+            return cls(success=False, errors=Messages.INVALID_TOKEN, payload="")
+
+
+class RevokeTokenMixin(Output):
+    """
+    Same as `grapgql_jwt` implementation, with standard output.
+    """
+
+    @classmethod
+    def resolve_mutation(cls, root, info, **kwargs):
+        try:
+            return cls.parent_resolve(root, info, **kwargs)
+        except JSONWebTokenExpired:
+            return cls(success=False, errors=Messages.EXPIRED_TOKEN, revoked=0)
+        except JSONWebTokenError:
+            return cls(success=False, errors=Messages.INVALID_TOKEN, revoked=0)
+
+
+class RefreshTokenMixin(Output):
+    """
+    Same as `grapgql_jwt` implementation, with standard output.
+    """
+
+    @classmethod
+    def resolve_mutation(cls, root, info, **kwargs):
+        try:
+            return cls.parent_resolve(root, info, **kwargs)
+        except JSONWebTokenExpired:
+            return cls(success=False, errors=Messages.EXPIRED_TOKEN, payload="", refresh_token="")
+        except JSONWebTokenError:
+            return cls(success=False, errors=Messages.INVALID_TOKEN, payload="", refresh_token="")
 
 
 class SendSecondaryEmailActivationMixin(Output):

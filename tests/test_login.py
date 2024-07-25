@@ -1,6 +1,5 @@
 from django.contrib.auth import get_user_model
 from pytest import mark
-from .decorators import skipif_django_21
 from .testCases import RelayTestCase, DefaultTestCase
 from graphql_auth.constants import Messages
 
@@ -79,7 +78,6 @@ class LoginTestCaseMixin:
         self.assertFalse(executed["refreshToken"])
 
     @mark.settings_b
-    @skipif_django_21()
     def test_not_verified_login_on_different_settings(self):
         query = self.get_query("username", self.not_verified_user.username)
         executed = self.make_request(query)
@@ -89,7 +87,6 @@ class LoginTestCaseMixin:
         self.assertFalse(executed["refreshToken"])
 
     @mark.settings_b
-    @skipif_django_21()
     def test_not_verified_login_on_different_settings_wrong_pass(self):
         query = self.get_query("username", self.not_verified_user.username, "wrongpass")
         executed = self.make_request(query)
