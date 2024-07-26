@@ -1,8 +1,6 @@
 import warnings
 from django.core import signing
-from django.contrib.auth import get_user_model
 from django.conf import settings as django_settings
-from django.core.signing import BadSignature
 
 from .exceptions import TokenScopeError
 

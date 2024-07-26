@@ -10,14 +10,14 @@ install-local:
 	python setup.py sdist bdist_wheel
 	python -m pip install dist/django-graphql-auth-${v}.tar.gz
 
-p ?= 38
-d ?= 30
+python ?= 38
+django ?= 3
 
 test:
-	tox -e py${p}-django${d} -- --cov-report term-missing --cov-report html
+	tox -e py${python}-django${django} -- --cov-report term-missing --cov-report html
 
 test-file:
-	tox -e py${p}-django${d} -- tests/test_${f}.py --cov-report html --cov-append
+	tox -e py${python}-django${django} -- tests/test_${f}.py --cov-report html --cov-append
 
 serve:
 	python docs/pre_build.py

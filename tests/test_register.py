@@ -6,7 +6,6 @@ from pytest import mark
 from django.contrib.auth import get_user_model
 
 from .testCases import RelayTestCase, DefaultTestCase
-from .decorators import skipif_django_21
 
 from graphql_auth.constants import Messages
 from graphql_auth.signals import user_registered
@@ -95,7 +94,6 @@ class RegisterTestCaseMixin:
         self.assertEqual(len(get_user_model().objects.all()), 0)
 
     @mark.settings_b
-    @skipif_django_21()
     def test_register_with_different_settings(self):
         """
         Register user, fail to register same user again

@@ -6,7 +6,6 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.conf import settings
 
 from .testCases import RelayTestCase, DefaultTestCase
-from .decorators import skipif_django_21
 
 from graphql_auth.constants import Messages
 from graphql_auth.models import UserStatus
@@ -21,7 +20,7 @@ class DeleteAccountTestCaseMixin:
 
     def test_not_authenticated(self):
         """
-            try to archive not authenticated
+        try to archive not authenticated
         """
         query = self.make_query()
         executed = self.make_request(query)
@@ -77,7 +76,6 @@ class DeleteAccountTestCaseMixin:
         self.assertEqual(self.user2.is_active, False)
 
     @mark.settings_b
-    @skipif_django_21()
     def test_valid_password_permanently_delete(self):
         query = self.make_query()
         variables = {"user": self.user2}
