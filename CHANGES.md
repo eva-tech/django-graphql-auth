@@ -1,5 +1,19 @@
 # Changelog
 
+## Unreleased
+
+- Pin Django to `4.2.*` and raise the `django-graphql-jwt` floor to `0.3.2`, the first release that allows graphql-core 3
+- Build the `Register` and `PasswordChange` success outputs with `with_late_fields`; they failed with `unexpected keyword argument 'refresh_token'` on graphene 3
+- Test Django 4.2 in tox and Travis
+
+## v0.5
+
+### v0.5.0
+
+- Support graphene 3 (`graphene>=3,<4`, `graphene_django>=3.2.3,<4`)
+- Build the token mixins' error outputs with `with_late_fields`, since graphene 3 rejects fields added after the class is created as `__init__` arguments
+- Token error messages are unchanged: `INVALID_TOKEN` and `EXPIRED_TOKEN` return the same `message` and `code`
+
 ## v0.3
 
 ### v0.3.16

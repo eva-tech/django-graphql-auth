@@ -26,7 +26,12 @@ from .exceptions import (
     PasswordAlreadySetError,
 )
 from .constants import Messages, TokenAction
-from .utils import revoke_user_refresh_token, get_token_payload, using_refresh_tokens
+from .utils import (
+    revoke_user_refresh_token,
+    get_token_payload,
+    using_refresh_tokens,
+    with_late_fields,
+)
 from .shortcuts import get_user_by_email, get_user_to_login
 from .signals import user_registered, user_verified
 from .decorators import (
@@ -125,7 +130,7 @@ class RegisterMixin(Output):
                         return_value = {}
                         for field in cls._meta.fields:
                             return_value[field] = getattr(payload, field)
-                        return cls(**return_value)
+                        return with_late_fields(cls(), **return_value)
                     return cls(success=True)
                 else:
                     return cls(success=False, errors=f.errors.get_json_data())
@@ -429,15 +434,16 @@ class ObtainJSONWebTokenMixin(Output):
                 raise UserNotVerified
             raise InvalidCredentials
         except (JSONWebTokenError, ObjectDoesNotExist, InvalidCredentials):
-            return cls(
-                success=False,
-                errors=Messages.INVALID_CREDENTIALS,
+            return with_late_fields(
+                cls(success=False, errors=Messages.INVALID_CREDENTIALS),
                 token="",
                 refresh_token="",
             )
         except UserNotVerified:
-            return cls(
-                success=False, errors=Messages.NOT_VERIFIED, token="", refresh_token=""
+            return with_late_fields(
+                cls(success=False, errors=Messages.NOT_VERIFIED),
+                token="",
+                refresh_token="",
             )
 
 
@@ -524,7 +530,7 @@ class PasswordChangeMixin(Output):
             return_value = {}
             for field in cls._meta.fields:
                 return_value[field] = getattr(payload, field)
-            return cls(**return_value)
+            return with_late_fields(cls(), **return_value)
         else:
             return cls(success=False, errors=f.errors.get_json_data())
 
@@ -594,17 +600,13 @@ class RefreshTokenMixin(Output):
         try:
             return cls.parent_resolve(root, info, **kwargs)
         except JSONWebTokenExpired:
-            return cls(
-                success=False,
-                errors=Messages.EXPIRED_TOKEN,
-                payload="",
+            return with_late_fields(
+                cls(success=False, errors=Messages.EXPIRED_TOKEN, payload=""),
                 refresh_token="",
             )
         except JSONWebTokenError:
-            return cls(
-                success=False,
-                errors=Messages.INVALID_TOKEN,
-                payload="",
+            return with_late_fields(
+                cls(success=False, errors=Messages.INVALID_TOKEN, payload=""),
                 refresh_token="",
             )
 
