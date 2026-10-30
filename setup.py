@@ -42,7 +42,7 @@ setup(
     ),
     packages=find_packages(exclude=["tests*"]),
     install_requires=[
-        "Django>=4.2,<4.3",
+        "Django==4.2.*",
         "django-filter>=2.4.0",
         "django-graphql-jwt>=0.3.2",
         "graphene_django>=3.2.3,<4",
