@@ -130,7 +130,7 @@ class RegisterMixin(Output):
                         return_value = {}
                         for field in cls._meta.fields:
                             return_value[field] = getattr(payload, field)
-                        return cls(**return_value)
+                        return with_late_fields(cls(), **return_value)
                     return cls(success=True)
                 else:
                     return cls(success=False, errors=f.errors.get_json_data())
@@ -530,7 +530,7 @@ class PasswordChangeMixin(Output):
             return_value = {}
             for field in cls._meta.fields:
                 return_value[field] = getattr(payload, field)
-            return cls(**return_value)
+            return with_late_fields(cls(), **return_value)
         else:
             return cls(success=False, errors=f.errors.get_json_data())
 
