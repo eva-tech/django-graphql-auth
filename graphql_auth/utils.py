@@ -75,3 +75,19 @@ def normalize_fields(dict_or_list, extra_list):
         return dict_or_list
     else:
         return dict_or_list + extra_list
+
+
+def with_late_fields(output, **late_fields):
+    """
+    Set fields that mixins add to ``_meta.fields`` after the class is created,
+    such as ``token`` and ``refresh_token``. graphene 3 builds ``__init__`` from
+    the fields a class has when it is created, so they can't be keyword
+    arguments, and the ones not given are left unset. graphene 2 set every
+    field, so those default to ``None`` here too.
+    """
+    for name in type(output)._meta.fields:
+        if not hasattr(output, name):
+            setattr(output, name, None)
+    for name, value in late_fields.items():
+        setattr(output, name, value)
+    return output
