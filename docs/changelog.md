@@ -9,7 +9,6 @@
 - Token error messages are unchanged: `INVALID_TOKEN` and `EXPIRED_TOKEN` return the same `message` and `code`
 - Pin Django to `4.2.*` and raise the `django-graphql-jwt` floor to `0.3.2`, the first release that allows graphql-core 3
 - Build the `Register` and `PasswordChange` success outputs with `with_late_fields`; they failed with `unexpected keyword argument 'refresh_token'` on graphene 3
-- Test Django 4.2 in tox and Travis
 
 ## v0.3
 
