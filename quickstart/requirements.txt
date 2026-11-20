@@ -1,6 +1,6 @@
 aniso8601==7.0.0
 asgiref==3.2.3
-Django==3.2.25
+Django==4.2.16
 django-filter==2.4.0
 django-graphql-auth==0.3.16
 django-graphql-jwt==0.4.0
